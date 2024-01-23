@@ -32,7 +32,7 @@ export const Task = React.memo(({ todolistId, task }: Props) => {
 
   const changeTaskTitleHandler =
     (title: string) => {
-      updateTask({ taskId:task.id, domainModel: { title }, todolistId });
+      updateTask({ taskId: task.id, domainModel: { title }, todolistId });
     };
 
   return (
