@@ -13,7 +13,7 @@ const fetchTodolists = createAppAsyncThunk<{ todolists: TodolistType[] }, void>(
       const res = await todolistsApi.getTodolists();
       return { todolists: res.data };
     });
-  },
+  }
 );
 
 const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, string>(
@@ -29,7 +29,7 @@ const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, string>(
         return rejectWithValue(null);
       }
     });
-  },
+  }
 );
 
 const removeTodolist = createAppAsyncThunk<{ id: string }, string>("todo/removeTodolist", async (id, thunkAPI) => {
@@ -59,7 +59,7 @@ const changeTodolistTitle = createAppAsyncThunk<UpdateTodolistTitleArgType, Upda
         return rejectWithValue(null);
       }
     });
-  },
+  }
 );
 
 const initialState: TodolistDomainType[] = [];
@@ -79,7 +79,7 @@ const slice = createSlice({
       if (todo) {
         todo.entityStatus = action.payload.entityStatus;
       }
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -90,7 +90,7 @@ const slice = createSlice({
         const newTodolist: TodolistDomainType = {
           ...action.payload.todolist,
           filter: "all",
-          entityStatus: "idle",
+          entityStatus: "idle"
         };
         state.unshift(newTodolist);
       })
@@ -108,10 +108,14 @@ const slice = createSlice({
         return [];
       });
   },
+  selectors: {
+    selectTodolists: (sliceState) => sliceState,
+  }
 });
 
-export const todolistsReducer = slice.reducer;
+export const todolistsSlice = slice.reducer;
 export const todolistsActions = slice.actions;
+export const {selectTodolists} = slice.selectors;
 export const todolistsThunks = { fetchTodolists, addTodolist, removeTodolist, changeTodolistTitle };
 
 // types
