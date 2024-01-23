@@ -1,4 +1,4 @@
-import { Task } from "../Task/Task";
+import { Task } from "./Task/Task";
 import React from "react";
 import { TaskStatuses } from "../../../../../common/enums";
 import { TodolistDomainType } from "../../../model/todolistsSlice";
