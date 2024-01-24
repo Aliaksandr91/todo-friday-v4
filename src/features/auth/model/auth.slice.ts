@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, UnknownAction } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, PayloadAction, UnknownAction } from "@reduxjs/toolkit";
 import { appActions } from "app/app.reducer";
 import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
 import { clearTasksAndTodolists } from "common/actions";
@@ -50,27 +50,16 @@ const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("app/in
 const slice = createSlice({
   name: "auth",
   initialState: {
-    isLoggedIn: false,
+    isLoggedIn: false
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addMatcher(
-        (action:UnknownAction)=>{
-          if (
-            action.type === "auth/login/fulfilled" ||
-            action.type === "auth/logout/fulfilled" ||
-            action.type === "app/initializeApp/fulfilled"
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        },
-        (state, action:PayloadAction<{isLoggedIn:boolean}>)=>{
+      .addMatcher(isAnyOf(authThunks.login.fulfilled, authThunks.logout.fulfilled, authThunks.initializeApp.fulfilled),
+        (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
           state.isLoggedIn = action.payload.isLoggedIn;
-        })
-  },
+        });
+  }
 });
 
 export const authSlice = slice.reducer;
