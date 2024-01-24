@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect } from "react";
-import { Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 import {
-  TodolistDomainType, todolistsThunks
+  TodolistDomainType
 } from "features/todolists-list/model/todolistsSlice";
 import { tasksThunks } from "features/todolists-list/model/tasksSlice";
 import { useActions } from "common/hooks";
@@ -17,30 +15,30 @@ type Props = {
   tasks: TaskType[];
 };
 
-export const Todolist = React.memo(function(props: Props) {
+export const Todolist = React.memo(function({todolist, tasks}: Props) {
   const { fetchTasks, addTask } = useActions(tasksThunks);
 
 
 
   useEffect(() => {
-    fetchTasks(props.todolist.id);
+    fetchTasks(todolist.id);
   }, []);
 
   const addTaskCb = useCallback(
     (title: string) => {
-      addTask({ title, todolistId: props.todolist.id });
+      return addTask({ title, todolistId: todolist.id }).unwrap();
     },
-    [props.todolist.id]
+    [todolist.id]
   );
 
 
   return (
     <div>
-      <TodolistTitle todolist={props.todolist}/>
-      <AddItemForm addItem={addTaskCb} disabled={props.todolist.entityStatus === "loading"} />
-      <Tasks todolist={props.todolist} tasks={props.tasks} />
+      <TodolistTitle todolist={todolist}/>
+      <AddItemForm addItem={addTaskCb} disabled={todolist.entityStatus === "loading"} />
+      <Tasks todolist={todolist} tasks={tasks} />
       <div style={{ paddingTop: "10px" }}>
-        <FilterTasksButtons todolist={props.todolist} />
+        <FilterTasksButtons todolist={todolist} />
       </div>
     </div>
   );
